@@ -1,4 +1,4 @@
-name: Deploy to AWS Elastic Beanstalk
+name: Deploy PHP app to Elastic Beanstalk
 
 on:
   push:
@@ -11,57 +11,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-
-      - name: Install Composer dependencies
-        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Prepare deploy zip
+      - name: Zip LMS folder
         run: |
-          zip -r deploy.zip . -x .git/* .github/* vendor/* node_modules/* storage/* .env
+          rm -f deploy-package.zip || true
+          cd LMS
+          zip -r ../deploy-package.zip . -x "*.git*"
 
-      - name: Deploy to Elastic Beanstalk
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Elastic Beanstalk (action)
         uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: ${{ secrets.AWS_REGION }}
-          application_name: ${{ secrets.EB_APPLICATION_NAME }}
-          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
-          version_label: ${{ github.sha }}
-          bucket_name: ${{ secrets.S3_BUCKET }}
-          bucket_key: "deployments/${{ github.sha }}.zip"
-          zip_file: deploy.zip
-name: Deploy to AWS Elastic Beanstalk
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Prepare zip
-        run: |
-          # exclude git metadata and workflow files
-          zip -r deploy.zip . -x .git/**\* .github/**\* node_modules/**\*
-
-      - name: Deploy to Elastic Beanstalk (upload to S3 and update)
-        uses: einaregilsson/beanstalk-deploy@v20
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: ${{ secrets.AWS_REGION }}
-          application_name: ${{ secrets.EB_APPLICATION }}
-          environment_name: ${{ secrets.EB_ENVIRONMENT }}
-          version_label: ${{ github.sha }}
-          bucket_name: ${{ secrets.EB_S3_BUCKET }}
-          bucket_key: deploy-${{ github.sha }}.zip
-          zip_file: deploy.zip
+          application_name: ${{ secrets.EB_APP_NAME }}
+          environment_name: ${{ secrets.EB_ENV_NAME }}
+          version_label: gh-${{ github.sha }}
+          zip_file: deploy-package.zip
