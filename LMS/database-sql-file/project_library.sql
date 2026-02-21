@@ -19,8 +19,9 @@ SET time_zone = "+00:00";
 
 --
 -- Database: `project_library`
---
-
+DROP DATABASE `library-db`;
+CREATE DATABASE `library-db`;
+USE `library-db`;
 -- --------------------------------------------------------
 
 --
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `admin_type` varchar(20) DEFAULT 'Admin',
   `admin_added` datetime NOT NULL,
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admin`
@@ -64,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `allowed_book` (
   `allowed_book_id` int NOT NULL AUTO_INCREMENT,
   `qntty_books` int NOT NULL,
   PRIMARY KEY (`allowed_book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `allowed_book`
@@ -78,13 +79,15 @@ INSERT INTO `allowed_book` (`allowed_book_id`, `qntty_books`) VALUES
 --
 -- Table structure for table `allowed_days`
 --
+USE `library-db`;
 
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `allowed_days`;
 CREATE TABLE IF NOT EXISTS `allowed_days` (
   `allowed_days_id` int NOT NULL AUTO_INCREMENT,
   `no_of_days` int NOT NULL,
   PRIMARY KEY (`allowed_days_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `allowed_days`
@@ -106,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `barcode` (
   `mid_barcode` int DEFAULT NULL,
   `suf_barcode` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`barcode_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `barcode`
@@ -145,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `book` (
   `date_added` datetime NOT NULL,
   `remarks` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `book`
@@ -177,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `borrow_book` (
   PRIMARY KEY (`borrow_book_id`),
   KEY `user_id` (`user_id`),
   KEY `book_id` (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `borrow_book`
@@ -197,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `penalty` (
   `penalty_id` int NOT NULL AUTO_INCREMENT,
   `penalty_amount` decimal(10,2) NOT NULL,
   PRIMARY KEY (`penalty_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `penalty`
@@ -221,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `report` (
   `detail_action` varchar(100) NOT NULL,
   `date_transaction` datetime NOT NULL,
   PRIMARY KEY (`report_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `report`
@@ -248,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `return_book` (
   `date_returned` datetime NOT NULL,
   `book_penalty` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`return_book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `return_book`
@@ -279,7 +282,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `roll_number` (`roll_number`),
   UNIQUE KEY `contact` (`contact`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user`
@@ -305,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `admin_type` varchar(20) DEFAULT NULL,
   `date_log` datetime NOT NULL,
   PRIMARY KEY (`user_log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user_log`
